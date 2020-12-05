@@ -19,7 +19,7 @@
 # <pep8 compliant>
 
 bl_info = {
-    "name": "Hotkey: 'W'",
+    "name": "Hotkey: 'V'",
     "description": "Sculpt Brush Menu",
     "author": "pitiwazou, meta-androcto",
     "version": (0, 1, 0),
