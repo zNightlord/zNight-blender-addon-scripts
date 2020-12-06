@@ -19,12 +19,12 @@
 # <pep8 compliant>
 
 bl_info = {
-    "name": "Hotkey: 'V' Sculpt Pie",
+    "name": "Hotkey: 'V' > Sculpt Pie",
     "description": "Sculpt Brush Menu",
     "author": "pitiwazou, meta-androcto",
     "version": (0, 1, 0),
-    "blender": (2, 80, 0),
-    "location": "W key",
+    "blender": (2, 91, 0),
+    "location": "V key",
     "warning": "",
     "doc_url": "",
     "category": "Sculpt Pie"
@@ -89,15 +89,15 @@ class PIE_MT_SculptPie(Menu):
         pie.operator("paint.brush_select",
                     text="    Clay Strips", icon_value=brush_icons["clay_strips"]).sculpt_tool = 'CLAY_STRIPS'
         ## 1 - BOTTOM - LEFT
-        pie.menu(PIE_MT_SculptMask.bl_idname,
-                text="    Mask", icon_value=brush_icons["mask"])
+        pie.menu(PIE_MT_SculptMaskTrim.bl_idname,
+                text="    Mask & Trim", icon_value=brush_icons["mask"])
 
         ## Moved to Draw group
         # pie.operator("paint.brush_select",
         #             text="    Inflate/Deflate", icon_value=brush_icons["inflate"]).sculpt_tool = 'INFLATE'
         ## 3 - BOTTOM - RIGHT
         pie.menu(PIE_MT_SculptExtras.bl_idname,
-                text="    More",icon_value=brush_icons["cloth"])
+                text="    More Tools", icon_value=brush_icons["cloth"])
 
 # Pie Sculpt Draw - Draw tool brushes
 class PIE_MT_SculptDraw(Menu):
@@ -106,53 +106,15 @@ class PIE_MT_SculptDraw(Menu):
 
     def draw(self, context):
         global brush_icons
-        layout = self.layout
-        layout.scale_y = 1.5
-        layout.operator("paint.brush_select",
-                    text="    Clay", icon_value=brush_icons["clay"]).sculpt_tool = 'CLAY'
-        layout.operator("paint.brush_select",
-                        text="    Inflate/Deflate", icon_value=brush_icons["inflate"]).sculpt_tool = 'INFLATE'
-        layout.operator("paint.brush_select",
-                    text="    Blob", icon_value=brush_icons["blob"]).sculpt_tool = 'BLOB'
-        layout.operator("paint.brush_select",
-                    text="    Layer", icon_value=brush_icons["layer"]).sculpt_tool = 'LAYER'
-        layout.operator("paint.brush_select",
-                    text="    Clay Thumb", icon_value=brush_icons["clay"]).sculpt_tool = 'CLAY_THUMB'
+        layout = self.layout    
+        layout.scale_y = 1.5    
+        layout.operator("wm.tool_set_by_id",text='Clay', icon_value=brush_icons["clay"]).name = "builtin_brush.Clay"
+        layout.operator("wm.tool_set_by_id",text='Draw Sharp', icon_value=brush_icons["draw_sharp"]).name = "builtin_brush.Draw Sharp"
+        layout.operator("wm.tool_set_by_id",text='Inflate', icon_value=brush_icons["inflate"]).name = "builtin_brush.Inflate"
+        layout.operator("wm.tool_set_by_id",text='Blob', icon_value=brush_icons["blob"]).name = "builtin_brush.Blob"
+        layout.operator("wm.tool_set_by_id",text='Layer', icon_value=brush_icons["layer"]).name = "builtin_brush.Layer"
+        layout.operator("wm.tool_set_by_id",text='Clay Thumb', icon_value=brush_icons["clay_thumb"]).name = "builtin_brush.Clay Thumb"
 
-# Pie Sculpt Mask - Mask tool Brushes
-class PIE_MT_SculptMask(Menu):
-    bl_idname = "PIE_MT_sculptMask"
-    bl_label = "Pie Sculpt Mask"
-
-    def draw(self, context):
-        global brush_icons
-        layout = self.layout
-        layout.scale_y = 1.5
-        
-        layout.operator("paint.brush_select", text='    Mask',
-                        icon_value=brush_icons["mask"]).sculpt_tool = 'MASK'
-        layout.operator("paint.brush_select", text='    Face sets',
-                        icon_value=brush_icons["draw_face_sets"]).sculpt_tool = 'DRAW_FACE_SETS'
-        layout.operator("view3d.select_box", text='    Box Mask')
-        layout.operator("paint.mask_lasso_gesture", text='  Lasso Mask')
-
-# Pie Sculpt Extras - More Tool Brushes
-class PIE_MT_SculptExtras(Menu):
-    bl_idname = "PIE_MT_sculptExtras"
-    bl_label = "Pie Sculpt Extras"
-
-    def draw(self, context):
-        global brush_icons  
-        layout = self.layout
-        layout.scale_y = 1.5
-
-        layout.operator("paint.brush_select", text='    Cloth',
-                        icon_value=brush_icons["cloth"]).sculpt_tool = 'CLOTH'
-        layout.operator("paint.brush_select", text='    Simplify',
-                        icon_value=brush_icons["simplify"]).sculpt_tool = 'SIMPLIFY'
-        layout.operator("paint.brush_select", text='    Slide Relax',
-                        icon_value=brush_icons["topology"]).sculpt_tool = 'TOPOLOGY'
-    
 # Pie Sculpt Grab - Grab Tool Brushes
 class PIE_MT_SculptGrab(Menu):
     bl_idname = "PIE_MT_sculptGrab"
@@ -163,22 +125,16 @@ class PIE_MT_SculptGrab(Menu):
         layout = self.layout
         layout.scale_y = 1.5
 
-        layout.operator("paint.brush_select",
-                        text='    Grab', icon_value=brush_icons["grab"]).sculpt_tool = 'GRAB'
-        layout.operator("paint.brush_select",
-                        text='    Snakehook', icon_value=brush_icons["snake_hook"]).sculpt_tool = 'SNAKE_HOOK'
-        layout.operator("paint.brush_select",
-                        text='    Pose', icon_value=brush_icons["pose"]).sculpt_tool = 'POSE'
-        layout.operator("paint.brush_select",
-                        text='    Nudge', icon_value=brush_icons["nudge"]).sculpt_tool = 'NUDGE'
-        layout.operator("paint.brush_select", text='    Multi-plane Scrape',
-                        icon_value=brush_icons["multiplane_scrape"]).sculpt_tool = 'MULTIPLANE_SCRAPE'
-        layout.operator("paint.brush_select",
-                        text='    Thumb', icon_value=brush_icons["thumb"]).sculpt_tool = 'THUMB'
-        layout.operator("paint.brush_select",
-                        text='    Rotate', icon_value=brush_icons["rotate"]).sculpt_tool = 'ROTATE'
-        layout.operator("paint.brush_select", text='    Pinch/Magnify',
-                        icon_value=brush_icons["pinch"]).sculpt_tool = 'PINCH'
+        layout.operator("wm.tool_set_by_id",text='Grab', icon_value=brush_icons["grab"]).name = "builtin_brush.Grab"
+        layout.operator("wm.tool_set_by_id",text='Snake Hook', icon_value=brush_icons["snake_hook"]).name = "builtin_brush.Snake Hook"
+        layout.operator("wm.tool_set_by_id",text='Pose', icon_value=brush_icons["pose"]).name = "builtin_brush.Pose"
+        layout.operator("wm.tool_set_by_id",text='Nudge', icon_value=brush_icons["nudge"]).name = "builtin_brush.Nudge"
+        layout.operator("wm.tool_set_by_id",text='Boundary', icon_value=brush_icons["boundary"]).name = "builtin_brush.Boundary"
+        layout.operator("wm.tool_set_by_id",text='Multi-plane Scrape', icon_value=brush_icons["multiplane_scrape"]).name = "builtin_brush.Multi-plane Scrape"
+        layout.operator("wm.tool_set_by_id",text='Thumb', icon_value=brush_icons["thumb"]).name = "builtin_brush.Thumb"
+        layout.operator("wm.tool_set_by_id",text='Rotate', icon_value=brush_icons["rotate"]).name = "builtin_brush.Rotate"
+        layout.operator("wm.tool_set_by_id",text='Thumb', icon_value=brush_icons["thumb"]).name = "builtin_brush.Thumb"
+        layout.operator("wm.tool_set_by_id",text='Pinch', icon_value=brush_icons["pinch"]).name = "builtin_brush.Pinch"
         
 # Pie Sculpt Smooth (Red) - Red tool Brushes
 class PIE_MT_SculptSmooth(Menu):
@@ -189,41 +145,135 @@ class PIE_MT_SculptSmooth(Menu):
         global brush_icons
         layout = self.layout
         layout.scale_y = 1.5
+        layout.operator("wm.tool_set_by_id",text='Smooth',icon_value=brush_icons["smooth"]).name = "builtin_brush.Smooth"
+        layout.operator("wm.tool_set_by_id",text='Scrape', icon_value=brush_icons["scrape"]).name = "builtin_brush.Scrape"
+        layout.operator("wm.tool_set_by_id",text='Fill', icon_value=brush_icons["fill"]).name = "builtin_brush.Fill"
+        layout.operator("wm.tool_set_by_id",text='Flatten', icon_value=brush_icons["flatten"]).name = "builtin_brush.Flatten"
 
-        layout.operator("paint.brush_select", text='    Smooth',
-                        icon_value=brush_icons["smooth"]).sculpt_tool = 'SMOOTH'
-        layout.operator("paint.brush_select", text='    Flatten',
-                        icon_value=brush_icons["flatten"]).sculpt_tool = 'FLATTEN'
-        layout.operator("paint.brush_select", text='    Scrape/Peaks',
-                        icon_value=brush_icons["scrape"]).sculpt_tool = 'SCRAPE'
-        layout.operator("paint.brush_select", text='    Fill/Deepen',
-                        icon_value=brush_icons["fill"]).sculpt_tool = 'FILL'
-            
+# Pie Sculpt Mask - Mask & Trim tool Brushes
+class PIE_MT_SculptMaskTrim(Menu):
+    bl_idname = "PIE_MT_sculptMaskTrim"
+    bl_label = "Pie Sculpt Mask"
+
+    def draw(self, context):    
+        global brush_icons
+        layout = self.layout
+        layout.scale_y = 1.5
+        #Mask tool
+        layout.operator("wm.tool_set_by_id",text='Mask', icon_value=brush_icons["mask"]).name = "builtin_brush.Mask"
+        layout.operator("wm.tool_set_by_id",text='Draw Face sets', icon_value=brush_icons["draw_face_sets"]).name = "builtin_brush.Draw Face Sets"
+
+        pie = layout.menu_pie()
+        col = pie.column()
+        col.menu(PIE_MT_SculptMask.bl_idname,
+                text="    Mask", icon_value=brush_icons["border_mask"])
+        # # Trim Tools
+        col.menu(PIE_MT_SculptTrim.bl_idname,
+                text="    Trim", icon_value=brush_icons["box_trim"])
+# Sub Menu Sculpt Mask
+class PIE_MT_SculptMask(Menu):
+    bl_idname = "PIE_MT_sculptMask"
+    bl_label = "Pie Sculpt Mask"
+
+    def draw(self, context):
+        global brush_icons
+        layout = self.layout
+        layout.scale_y = 1.5
+        # Mask Tools
+        layout.operator("wm.tool_set_by_id",text='Box mask', icon_value=brush_icons["border_mask"]).name = "builtin.box_mask"
+        layout.operator("wm.tool_set_by_id",text='Lasso mask', icon_value=brush_icons["lasso_mask"]).name = "builtin.lasso_mask"
+        layout.operator("wm.tool_set_by_id",text='Line mask', icon_value=brush_icons["line_mask"]).name = "builtin.line_mask"
+
+# Sub Menu Sculpt Trim
+class PIE_MT_SculptTrim(Menu):
+    bl_idname = "PIE_MT_sculptTrim"
+    bl_label = "Pie Sculpt Trim"
+
+    def draw(self, context):
+        global brush_icons
+        layout = self.layout
+        layout.scale_y = 1.5
+        # Trim Tools
+        layout.operator("wm.tool_set_by_id",text='Box Trim', icon_value=brush_icons["box_trim"]).name = "builtin.box_trim"
+        layout.operator("wm.tool_set_by_id",text='Lasso Trim', icon_value=brush_icons["lasso_trim"]).name = "builtin.lasso_trim"
+        layout.operator("wm.tool_set_by_id",text='Line project', icon_value=brush_icons["line_project"]).name = "builtin.line_project"
+# Pie Sculpt Extras - More Tool Brushes
+class PIE_MT_SculptExtras(Menu):
+    bl_idname = "PIE_MT_sculptExtras"
+    bl_label = "Pie Sculpt Extras"
+
+    def draw(self, context):
+        global brush_icons  
+        layout = self.layout
+        layout.scale_y = 1.5
+
+        layout.operator("wm.tool_set_by_id",text='Cloth', icon_value=brush_icons["cloth"]).name = "builtin_brush.Cloth"
+        layout.operator("wm.tool_set_by_id",text='Simplify' , icon_value=brush_icons["simplify"]).name = "builtin_brush.Simplify"
+        layout.operator("wm.tool_set_by_id",text='Slide Relax', icon_value=brush_icons["topology"]).name = "builtin_brush.Slide Relax"
+        layout.operator("wm.tool_set_by_id",text='Multires Displacement Eraser', icon_value=brush_icons["displacement_eraser"]).name = "builtin_brush.Multires Displacement Eraser"
+        layout.operator("wm.tool_set_by_id",text='Mesh Filter', icon_value=brush_icons["mesh_filter"]).name = "builtin.mesh_filter"
+        layout.operator("wm.tool_set_by_id",text='Cloth Filter', icon_value=brush_icons["cloth_filter"]).name = "builtin.cloth_filter"
+
+        pie = layout.menu_pie()
+        col = pie.column()
+        col.menu(PIE_MT_SculptTransform.bl_idname,
+                text="    Transform", icon_value=brush_icons["transform.transform"])
+# Sub Menu Transform
+class PIE_MT_SculptTransform(Menu):
+    bl_idname = "PIE_MT_sculptTransform"
+    bl_label = "Pie Sculpt Transform"
+
+    def draw(self, context):
+        global brush_icons
+        layout = self.layout
+        layout.scale_y = 1.5
+        # Trim Tools
+        layout.operator("wm.tool_set_by_id",text='Move', icon_value=brush_icons["transform.translate"]).name = "builtin.move"
+        layout.operator("wm.tool_set_by_id",text='Rotate', icon_value=brush_icons["transform.rotate"]).name = "builtin.rotate"
+        layout.operator("wm.tool_set_by_id",text='Scale', icon_value=brush_icons["transform.resize"]).name = "builtin.scale"
+        layout.operator("wm.tool_set_by_id",text='Transform', icon_value=brush_icons["transform.transform"]).name = "builtin.transform"
+
 brush_icons = {}
 
 def create_icons():
     global brush_icons
     icons_directory = bpy.utils.system_resource('DATAFILES', "icons")
-    brushes = ["crease", "blob", "smooth", "draw", "clay", "clay_strips","clay_thumb", "inflate", "grab",
-        "nudge", "thumb", "snake_hook", "rotate", "pose", "flatten", "scrape", "fill", "pinch",
-        "layer", "simplify", "topology", "multiplane_scrape", "cloth", "mask","draw_face_sets"]
+    brushes = ["crease", "blob", "draw", "draw_sharp", "clay", "clay_strips","clay_thumb", "inflate","layer",
+        "grab", "nudge", "thumb", "snake_hook", "rotate", "pose", "multiplane_scrape", "boundary", "topology", "pinch",
+        "flatten", "scrape", "fill", "smooth",
+        "simplify", "cloth", "displacement_eraser", "mask", "draw_face_sets",
+        "border_mask","lasso_mask","line_mask","box_trim","lasso_trim","line_project","mesh_filter","cloth_filter"
+        ]
+    transform = ["transform.translate","transform.rotate","transform.resize","transform.transform"]
     for brush in brushes:
-        filename = os.path.join(icons_directory, f"brush.sculpt.{brush}.dat")
+        try:
+            filename = os.path.join(icons_directory, f"brush.sculpt.{brush}.dat")
+            icon_value = bpy.app.icons.new_triangles_from_file(filename)
+            brush_icons[brush] = icon_value
+        except ValueError:
+            filename = os.path.join(icons_directory, f"ops.sculpt.{brush}.dat")
+            icon_value = bpy.app.icons.new_triangles_from_file(filename)
+            brush_icons[brush] = icon_value
+    for transform_ops in transform:
+        filename = os.path.join(icons_directory, f"ops.{transform_ops}.dat")
         icon_value = bpy.app.icons.new_triangles_from_file(filename)
-        brush_icons[brush] = icon_value
-
+        brush_icons[transform_ops] = icon_value
 
 def release_icons():
     global brush_icons
     for value in brush_icons.values():
         bpy.app.icons.release(value)
 
+
 classes = (
     PIE_MT_SculptPie,
     PIE_MT_SculptExtras,
+    PIE_MT_SculptTransform,
     PIE_MT_SculptGrab,
     PIE_MT_SculptDraw,
+    PIE_MT_SculptTrim,
     PIE_MT_SculptMask,
+    PIE_MT_SculptMaskTrim,
     PIE_MT_SculptSmooth,
     PIE_OT_SculptSculptDraw
     )
