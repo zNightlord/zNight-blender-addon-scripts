@@ -21,14 +21,14 @@
 bl_info = {
     "name": "Hotkey: 'V' > Sculpt Pie",
     "description": "Sculpt Brush Menu",
-    "author": "pitiwazou, meta-androcto",
+    "author": "pitiwazou, meta-androcto, zNight(modified)",
     "version": (0, 1, 0),
     "blender": (2, 91, 0),
     "location": "V key",
     "warning": "",
     "doc_url": "",
     "category": "Sculpt Pie"
-    }
+    }   
 
 import os
 
@@ -47,7 +47,7 @@ class PIE_OT_SculptSculptDraw(Operator):
         return {'FINISHED'}
 
 
-# Pie Sculp Pie Menus - W
+# Pie Sculp Pie Menus - V
 class PIE_MT_SculptPie(Menu):
     bl_idname = "PIE_MT_sculpt"
     bl_label = "Pie Sculpt"
@@ -76,9 +76,6 @@ class PIE_MT_SculptPie(Menu):
         ## 8 - TOP
         pie.operator("sculpt.sculptraw",
                     text="    Draw", icon_value=brush_icons["draw"])
-        # Moved to Draw group
-        # pie.operator("sculpt.sculptraw",
-        #             text="    Draw", icon_value=brush_icons["draw"])
         ## 7 - TOP - LEFT
         pie.operator("paint.brush_select",
                     text="    Crease", icon_value=brush_icons["crease"]).sculpt_tool = 'CREASE'
@@ -91,7 +88,6 @@ class PIE_MT_SculptPie(Menu):
         ## 1 - BOTTOM - LEFT
         pie.menu(PIE_MT_SculptMaskTrim.bl_idname,
                 text="    Mask & Trim", icon_value=brush_icons["mask"])
-
         ## Moved to Draw group
         # pie.operator("paint.brush_select",
         #             text="    Inflate/Deflate", icon_value=brush_icons["inflate"]).sculpt_tool = 'INFLATE'
@@ -99,6 +95,35 @@ class PIE_MT_SculptPie(Menu):
         pie.menu(PIE_MT_SculptExtras.bl_idname,
                 text="    More Tools", icon_value=brush_icons["cloth"])
 
+        pie.separator()
+        pie.separator()
+        other = pie.column()
+        gap = other.column()
+        gap.separator()
+        gap.scale_y = 4
+        transformation_menu_A = other.box().row()
+        transformation_menu_A.scale_y= 1.3
+        transformation_menu_A.scale_x= 1.2
+        transformation_menu_A.operator("wm.tool_set_by_id",text='Move', icon_value=brush_icons["transform.translate"]).name = "builtin.move"
+        transformation_menu_A.operator("wm.tool_set_by_id",text='Rotate', icon_value=brush_icons["transform.rotate"]).name = "builtin.rotate"
+        transformation_menu_A.operator("wm.tool_set_by_id",text='Scale', icon_value=brush_icons["transform.resize"]).name = "builtin.scale"
+        transformation_menu_A.operator("wm.tool_set_by_id",text='Transform', icon_value=brush_icons["transform.transform"]).name = "builtin.transform"
+
+        pie.separator()
+        pie.separator()
+        other_B = pie.row()
+        other_B.label(text='                        ')
+        gap_B = other_B.column()
+        gap_B.separator()
+        gap_B.scale_y = 3
+        transformation_menu_B = other_B.box().column()
+        transformation_menu_B.label(text="Mirror", icon='MOD_MIRROR')
+        transformation_menu_B.scale_x= 1.2
+        transformation_menu_B.operator("wm.context_toggle", text="X ").data_path = "object.data.use_mirror_x"
+        transformation_menu_B.operator("wm.context_toggle", text="Y ").data_path = "object.data.use_mirror_y"
+        transformation_menu_B.operator("wm.context_toggle", text="Z ").data_path = "object.data.use_mirror_z"
+        gap_B.label()
+        gap_B.label()
 # Pie Sculpt Draw - Draw tool brushes
 class PIE_MT_SculptDraw(Menu):
     bl_idname = "PIE_MT_sculptDraw"
@@ -136,7 +161,7 @@ class PIE_MT_SculptGrab(Menu):
         layout.operator("wm.tool_set_by_id",text='Thumb', icon_value=brush_icons["thumb"]).name = "builtin_brush.Thumb"
         layout.operator("wm.tool_set_by_id",text='Pinch', icon_value=brush_icons["pinch"]).name = "builtin_brush.Pinch"
         
-# Pie Sculpt Smooth (Red) - Red tool Brushes
+# Pie Sculpt Smooth (Red) - Smooth tool Brushes
 class PIE_MT_SculptSmooth(Menu):
     bl_idname = "PIE_MT_sculptSmooth"
     bl_label = "Pie Sculpt Smooth"
@@ -159,10 +184,10 @@ class PIE_MT_SculptMaskTrim(Menu):
         global brush_icons
         layout = self.layout
         layout.scale_y = 1.5
-        #Mask tool
+        # Mask Draw tool
         layout.operator("wm.tool_set_by_id",text='Mask', icon_value=brush_icons["mask"]).name = "builtin_brush.Mask"
         layout.operator("wm.tool_set_by_id",text='Draw Face sets', icon_value=brush_icons["draw_face_sets"]).name = "builtin_brush.Draw Face Sets"
-
+        # # Mask Tools
         pie = layout.menu_pie()
         col = pie.column()
         col.menu(PIE_MT_SculptMask.bl_idname,
@@ -170,7 +195,7 @@ class PIE_MT_SculptMaskTrim(Menu):
         # # Trim Tools
         col.menu(PIE_MT_SculptTrim.bl_idname,
                 text="    Trim", icon_value=brush_icons["box_trim"])
-# Sub Menu Sculpt Mask
+# Sub Menu Sculpt Mask  
 class PIE_MT_SculptMask(Menu):
     bl_idname = "PIE_MT_sculptMask"
     bl_label = "Pie Sculpt Mask"
@@ -208,30 +233,11 @@ class PIE_MT_SculptExtras(Menu):
         layout.scale_y = 1.5
 
         layout.operator("wm.tool_set_by_id",text='Cloth', icon_value=brush_icons["cloth"]).name = "builtin_brush.Cloth"
-        layout.operator("wm.tool_set_by_id",text='Simplify' , icon_value=brush_icons["simplify"]).name = "builtin_brush.Simplify"
         layout.operator("wm.tool_set_by_id",text='Slide Relax', icon_value=brush_icons["topology"]).name = "builtin_brush.Slide Relax"
+        layout.operator("wm.tool_set_by_id",text='Simplify' , icon_value=brush_icons["simplify"]).name = "builtin_brush.Simplify"
         layout.operator("wm.tool_set_by_id",text='Multires Displacement Eraser', icon_value=brush_icons["displacement_eraser"]).name = "builtin_brush.Multires Displacement Eraser"
         layout.operator("wm.tool_set_by_id",text='Mesh Filter', icon_value=brush_icons["mesh_filter"]).name = "builtin.mesh_filter"
         layout.operator("wm.tool_set_by_id",text='Cloth Filter', icon_value=brush_icons["cloth_filter"]).name = "builtin.cloth_filter"
-
-        pie = layout.menu_pie()
-        col = pie.column()
-        col.menu(PIE_MT_SculptTransform.bl_idname,
-                text="    Transform", icon_value=brush_icons["transform.transform"])
-# Sub Menu Transform
-class PIE_MT_SculptTransform(Menu):
-    bl_idname = "PIE_MT_sculptTransform"
-    bl_label = "Pie Sculpt Transform"
-
-    def draw(self, context):
-        global brush_icons
-        layout = self.layout
-        layout.scale_y = 1.5
-        # Trim Tools
-        layout.operator("wm.tool_set_by_id",text='Move', icon_value=brush_icons["transform.translate"]).name = "builtin.move"
-        layout.operator("wm.tool_set_by_id",text='Rotate', icon_value=brush_icons["transform.rotate"]).name = "builtin.rotate"
-        layout.operator("wm.tool_set_by_id",text='Scale', icon_value=brush_icons["transform.resize"]).name = "builtin.scale"
-        layout.operator("wm.tool_set_by_id",text='Transform', icon_value=brush_icons["transform.transform"]).name = "builtin.transform"
 
 brush_icons = {}
 
@@ -268,7 +274,6 @@ def release_icons():
 classes = (
     PIE_MT_SculptPie,
     PIE_MT_SculptExtras,
-    PIE_MT_SculptTransform,
     PIE_MT_SculptGrab,
     PIE_MT_SculptDraw,
     PIE_MT_SculptTrim,
@@ -291,7 +296,7 @@ def register():
     if wm.keyconfigs.addon:
         # Sculpt Pie Menu
         km = wm.keyconfigs.addon.keymaps.new(name='Sculpt')
-        kmi = km.keymap_items.new('wm.call_menu_pie', 'V', 'PRESS')
+        kmi = km.keymap_items.new('wm.call_menu_pie', 'V', 'PRESS') #Replace 'V' with interfere 'W' Faceset shortcut
         kmi.properties.name = "PIE_MT_sculpt"
         addon_keymaps.append((km, kmi))
 
