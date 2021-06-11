@@ -9,16 +9,13 @@ toolPrefix = ["builtin_brush","builtin"]
 operators = ["wm","sculpt"]
 
 def nameBrush(name):
-    if name == 'Slide Relax':
-        name =='Topology'
-    elif name == 'move':
-        name == 'translate'
+    if 'Slide Relax' in name:
+        name = name.replace('Slide Relax','Topology')
     else:
         pass
     return name
 
 def namePrefix(name): #remove prefix. builtin_brush.Draw => Draw
-    name = nameBrush(name)
     if toolPrefix[0] in name:
         name = name.replace(toolPrefix[0]+".","").title()
     elif toolPrefix[1] in name:

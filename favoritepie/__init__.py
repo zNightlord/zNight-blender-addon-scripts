@@ -61,7 +61,7 @@ def register():
 
     # Default
     defaultPie('pieOne',"Scrape")
-    defaultPie('pieTwo',"Fill")
+    defaultPie('pieTwo',"Slide Relax")
     defaultPie('pieThree',"Clay Strips")
     defaultPie('pieFour',"Inflate")
     defaultPie('pieFive',"Snake Hook")
