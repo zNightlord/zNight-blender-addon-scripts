@@ -38,7 +38,7 @@ from bpy.types import Menu, Operator
 
 # Sculpt Draw
 class PIE_OT_SculptSculptDraw(Operator):
-    bl_idname = "sculpt.sculptraw"
+    bl_idname = "sculpt.sculptdraw"
     bl_label = "Sculpt SculptDraw"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -65,7 +65,7 @@ class PIE_MT_SculptPie(Menu):
         #             text="    Crease", icon_value=brush_icons["crease"]).sculpt_tool = 'CREASE'
         ## 6 - RIGHT
         pie.menu(PIE_MT_SculptSmooth.bl_idname,
-                    text="    Smooth Brushes", icon_value=brush_icons["smooth"])
+                    text="    Smooth Brushes", icon_value=brush_icons["smooth"])    
 
         # Moved to Draw group
         # pie.operator("paint.brush_select",
@@ -74,17 +74,14 @@ class PIE_MT_SculptPie(Menu):
         pie.menu(PIE_MT_SculptGrab.bl_idname,
                     text="    Grab Brushes", icon_value=brush_icons["grab"])
         ## 8 - TOP
-        pie.operator("sculpt.sculptraw",
-                    text="    Draw", icon_value=brush_icons["draw"])
+        pie.operator("wm.tool_set_by_id",text='Draw', icon_value=brush_icons["draw"]).name = "builtin_brush.Draw"
         ## 7 - TOP - LEFT
-        pie.operator("paint.brush_select",
-                    text="    Crease", icon_value=brush_icons["crease"]).sculpt_tool = 'CREASE'
+        pie.operator("wm.tool_set_by_id",text='Crease', icon_value=brush_icons["crease"]).name = "builtin_brush.Crease"
         # Moved to Draw group
         # pie.operator("paint.brush_select",
         #             text="    Clay", icon_value=brush_icons["clay"]).sculpt_tool = 'CLAY'
         ## 9 - TOP - RIGHT
-        pie.operator("paint.brush_select",
-                    text="    Clay Strips", icon_value=brush_icons["clay_strips"]).sculpt_tool = 'CLAY_STRIPS'
+        pie.operator("wm.tool_set_by_id",text='Clay Strips', icon_value=brush_icons["clay_strips"]).name = "builtin_brush.Clay Strips"
         ## 1 - BOTTOM - LEFT
         pie.menu(PIE_MT_SculptMaskTrim.bl_idname,
                 text="    Mask & Trim", icon_value=brush_icons["mask"])
@@ -317,3 +314,6 @@ def unregister():
 
 if __name__ == "__main__":
     register()
+
+
+# bpy.context.workspace.tools.from_space_view3d_mode(bpy.context.mode, create=False).idname
